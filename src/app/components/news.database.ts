@@ -1,21 +1,23 @@
 import Dexie from 'dexie'
 import { Injectable } from '@angular/core'
-import { Countries } from './models'
+import { Articles, Countries } from './models'
 
 
 @Injectable()
 export class NewsDatabase extends Dexie{
     apiKey: Dexie.Table
     countries : Dexie.Table<Countries, string>
+    articles: Dexie.Table<Articles, number>
     constructor(){
         super('newsdb')
         this.version(1).stores({
             api: 'api',
-            countries: 'code'
-            
+            countries: 'code', 
+            articles: '++id,expiry, country'
         })
         this.apiKey = this.table('api')
         this.countries = this.table('countries')
+        this.articles= this.table('articles')
     }
     
     getApi(): Promise<any[]> {
@@ -35,7 +37,23 @@ export class NewsDatabase extends Dexie{
         return this.countries.count()
     }
 
-    getCountriesList (): Promise<Countries[]> {
+    getCountriesList(): Promise<Countries[]> {
         return this.countries.toArray()
+    }
+
+    cachedArticles(arr: Articles): Promise<any> {
+        return this.articles.put(arr)
+    }
+    clearInvalidCached(now: number): Promise<any> {
+        return this.articles.where('expiry').below(now).delete()
+    }
+
+    getCachedArticles(country: string):  Promise<Articles[]> {
+
+        
+        return this.articles.where('country').equals(country).toArray()
+
+      
+
     }
 }

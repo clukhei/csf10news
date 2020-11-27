@@ -14,13 +14,7 @@ export class CountryListComponent implements OnInit {
  
   constructor(private newsDB: NewsDatabase, private router: Router, private http: HttpClient) {
 
-    this.newsDB.getApi()
-    .then(res=> {
-      if (res.length < 0) {
-        this.router.navigate(['/api'])
-      }
-    })
-    .catch(res=> console.log(res))
+
    }
  
 
@@ -29,13 +23,21 @@ export class CountryListComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+
+
     this.newsDB.getCountriesCount()
       .then(res => {
         if (res > 0) {
           this.newsDB.getCountriesList()
             .then(res => this.countries = res)
         } else this.fetchFlagsApi()
+      }).then(()=> {
+        this.newsDB.getApi()
+        .then(res=> {
+          if (res.length <= 0) {
+           return this.router.navigate(['/api'])
+          }
+        })
       })
       .catch(e => console.log(e))
 

@@ -14,6 +14,7 @@ export interface Articles{
     urlToImage: string;
     publishedAt: string;
     content: string;
-    expiry: Date
+    expiry: number
+    saved: boolean
 
 }

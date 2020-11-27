@@ -40,6 +40,7 @@ export class ApiFormComponent implements OnInit {
   saveApi() {
     const api = this.form.get('api').value
     this.newsDB.saveApi(api)
+    this.router.navigate(['/'])
 
   }
 
