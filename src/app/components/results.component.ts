@@ -92,5 +92,6 @@ export class ResultsComponent implements OnInit {
   saveArticle(i){
     console.log('saved')
     this.newsDB.addToSave(this.articles[i])
+    alert('Saved!')
   }
 }
