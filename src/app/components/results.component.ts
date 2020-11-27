@@ -20,6 +20,7 @@ export class ResultsComponent implements OnInit {
   ngOnInit(): void {
     this.code = this.activatedRoute.snapshot.params['code']
     this.country = this.activatedRoute.snapshot.params['name']
+    //clear any expired articles
     this.newsDB.clearInvalidCached(new Date().getTime())
       .then(() => {
         this.newsDB.getCachedArticles(this.country)
@@ -50,9 +51,6 @@ export class ResultsComponent implements OnInit {
       })
 
 
-
-
-    //this.fetchNewsApi()
   }
 
 
@@ -85,5 +83,10 @@ export class ResultsComponent implements OnInit {
 
   openLink(i) {
     window.open(this.articles[i].url)
+  }
+
+  saveArticle(i){
+    console.log('saved')
+    this.newsDB.addToSave(this.articles[i])
   }
 }

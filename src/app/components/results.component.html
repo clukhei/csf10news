@@ -1,6 +1,7 @@
 <div class="container">
     <h1>Results</h1>
     <h2>News from {{country}}</h2>
+    <button class="btn btn-primary" [routerLink]="['/']">Back</button>
 
     <div class="card mt-5" style="width: 25rem;" *ngFor="let a of articles;let i =index">
         
@@ -19,7 +20,7 @@
           <li class="list-group-item" style="font-size: 10px;"> {{a.content}}</li>      
         </ul>
         <div class="card-body ">
-            <button class="btn btn-success card-link"> Save Article</button>
+            <button class="btn btn-success card-link" (click)="saveArticle(i)"> Save Article</button>
             <button class="btn btn-info card-link" (click)="openLink(i)"> View Article</button>
         </div>
       </div>
