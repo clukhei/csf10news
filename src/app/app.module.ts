@@ -7,11 +7,13 @@ import { ApiFormComponent } from './components/api-form.component';
 import { CountryListComponent } from './components/country-list.component';
 import { ResultsComponent } from './components/results.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HomeComponent } from './components/home.component';
+import {HttpClientModule} from '@angular/common/http'
+import { NewsDatabase } from './components/news.database'
 
 const ROUTES: Routes = [
-  {path: '', component: HomeComponent},
+  {path: '', component: CountryListComponent},
   {path: 'results', component: ResultsComponent},
+  {path: 'api', component: ApiFormComponent},
   {path: '**', redirectTo:'/', pathMatch: 'full'}
 ]
 @NgModule({
@@ -20,16 +22,18 @@ const ROUTES: Routes = [
     ApiFormComponent,
     CountryListComponent,
     ResultsComponent,
-    HomeComponent
+ 
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES),
+    HttpClientModule
+    
     
   ],
-  providers: [],
+  providers: [NewsDatabase],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

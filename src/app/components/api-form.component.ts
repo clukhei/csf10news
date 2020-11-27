@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-api-form',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ApiFormComponent implements OnInit {
 
+  form: FormGroup = new FormGroup({
+    api: new FormControl('')
+  })
+
   constructor() { }
 
   ngOnInit(): void {
+    this.form
   }
 
 }

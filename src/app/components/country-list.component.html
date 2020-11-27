@@ -1,1 +1,15 @@
-<p>country-list works!</p>
+<div class="container">
+  <h1>My News App</h1>
+  <div class="d-flex justify-content-between">
+    <h3>Countries</h3>
+    <button type="button" class="btn btn-primary" (click)="goSetApi()">Settings</button>
+  </div>
+  
+<div class="list-group" *ngFor="let c of countries">
+  <a [routerLink]="['/results', c.code]" href="#" class="list-group-item list-group-item-action">
+    {{ c.name }}
+    <img src="{{ c.flag }}" alt="flag" width="10%" />
+  </a>
+</div>
+</div>
+

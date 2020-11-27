@@ -1,4 +1,8 @@
+import { HttpClient ,HttpParams} from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Countries } from './models';
+import {NewsDatabase} from './news.database'
 
 @Component({
   selector: 'app-country-list',
@@ -7,9 +11,49 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CountryListComponent implements OnInit {
 
-  constructor() { }
+  constructor(private newsDB: NewsDatabase , private router: Router, private http: HttpClient) { }
+  apiExist = false
+
+  countries: Countries[]
+  
 
   ngOnInit(): void {
+    /*   if (!this.apiExist){
+        this.router.navigate(['/api'])
+      } */
+
+    this.fetchFlagsApi()
+  }
+
+  async fetchFlagsApi (){
+    const possibleOptions = 'ae ar at au be bg br ca ch cn co cu cz de eg fr gb gr hk hu id ie il in it jp kr lt lv ma mx my ng nl no nz ph pl pt ro rs ru sa se sg si sk th tr tw ua us ve za'
+    const query = possibleOptions.split(' ').join(';')
+    const flagsUrl= 'https://restcountries.eu/rest/v2/alpha'
+    let params = new HttpParams()
+    params = params.set('codes', query)
+  
+  this.http.get<any>(flagsUrl, {params: params}).toPromise()
+    .then(res =>  {
+      console.log(res)
+      this.countries = res.map(v=> {
+        const name= v.name
+        const flag = v.flag
+        const code = v.alpha2Code
+        return {name, flag, code} as Countries
+      })
+      return this.countries
+    }).then(res =>{
+      res.forEach(c=> {
+        this.newsDB.saveCountriesList(c)
+      })
+     
+    })
+    .catch(e=> console.log(e))
+
+  }
+
+  goSetApi(){
+    console.log('hi')
   }
 
 }
