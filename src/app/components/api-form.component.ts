@@ -12,12 +12,7 @@ export class ApiFormComponent implements OnInit {
 
   apiKey: string = ''
   constructor(private router: Router, private newsDB: NewsDatabase) {
- /*    this.newsDB.getApi().then(res => {
-      console.log('constructor')
-      if (res.length > 0) {
-        this.apiKey = res[0].api
-      }
-    }) */
+
     
   }
 

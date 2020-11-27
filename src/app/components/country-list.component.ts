@@ -11,7 +11,7 @@ import { NewsDatabase } from './news.database'
 })
 export class CountryListComponent implements OnInit {
   apiExist = false
-  api: string = ''
+ 
   constructor(private newsDB: NewsDatabase, private router: Router, private http: HttpClient) {
 
     this.newsDB.getApi()

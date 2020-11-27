@@ -12,7 +12,7 @@ import { NewsDatabase } from './components/news.database'
 
 const ROUTES: Routes = [
   {path: '', component: CountryListComponent},
-  {path: 'results', component: ResultsComponent},
+  {path: 'results/:name/:code', component: ResultsComponent},
   {path: 'api', component: ApiFormComponent},
   {path: '**', redirectTo:'/', pathMatch: 'full'}
 ]
