@@ -27,12 +27,14 @@ export class ResultsComponent implements OnInit {
     //clear any expired articles
     this.newsDB.clearInvalidCached(new Date().getTime())
       .then(() => {
+        //get cached articles
         this.newsDB.getCachedArticles(this.country)
           .then(res => {
             if (res.length > 0) {
               res.forEach(art => this.articles.push(art))
               console.log(this.articles)
             } else {
+              //proceed to fetch
               this.newsDB.getApi()
                 .then(res => {
                   this.api = res[0].api
