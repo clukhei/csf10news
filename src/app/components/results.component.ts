@@ -20,14 +20,18 @@ export class ResultsComponent implements OnInit {
   ngOnInit(): void {
     this.code = this.activatedRoute.snapshot.params['code']
     this.country = this.activatedRoute.snapshot.params['name']
+    // get savedArticles 
+    this.newsDB.getSavedArticles(this.country).then(res => {
+      res.forEach(art => this.articles.push(art))
+    })
     //clear any expired articles
     this.newsDB.clearInvalidCached(new Date().getTime())
       .then(() => {
         this.newsDB.getCachedArticles(this.country)
           .then(res => {
             if (res.length > 0) {
-              console.log(res.length)
-              this.articles = res
+              res.forEach(art => this.articles.push(art))
+              console.log(this.articles)
             } else {
               this.newsDB.getApi()
                 .then(res => {

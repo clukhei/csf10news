@@ -60,4 +60,8 @@ export class NewsDatabase extends Dexie {
     addToSave(art: Articles): Promise<any>{
         return this.savedArticles.put(art)
     }
+
+    getSavedArticles(country:string): Promise<Articles[]> {
+        return this.savedArticles.where('country').equals(country).toArray()
+    }
 }
