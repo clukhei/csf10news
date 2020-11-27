@@ -1,13 +1,21 @@
-<div class="container ">
-    <h1>Yes Another News App</h1>
-    <h2>Settings</h2>
-    <div>NewsAPI.org</div>
+<div class="container">
+  <h1>Yes Another News App</h1>
+  <h2>Settings</h2>
+  <div>NewsAPI.org</div>
 
-
-    <form class="d-flex" [formGroup]="form">
-    <input type="text" class="form-control" placeholder="API from newsapi.org" formControlName="api">
-    </form>
-    <button class="btn btn-primary">Add</button>
-    <button class="btn btn-primary">Back</button>
-    <button class="btn btn-primary">Delete</button>
+  <form class="d-flex" [formGroup]="form">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="API from newsapi.org"
+      formControlName="api"
+    />
+  </form>
+  <div class="d-flex justify-content-between">
+    <div>
+      <button class="btn btn-primary" (click)="goBack()">Back</button>
+      <button class="btn btn-primary" [disabled]="form.invalid" (click)="deleteApi()">Delete</button>
+    </div>
+    <button class="btn btn-primary" [disabled]="form.invalid" (click)="saveApi()">Add</button>
+  </div>
 </div>
