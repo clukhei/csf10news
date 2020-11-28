@@ -29,11 +29,18 @@ export class ResultsComponent implements OnInit {
     //clear any expired articles
     this.newsDB.clearInvalidCached(new Date().getTime())
       .then(() => {
+        return this.newsDB.countSavedArticlesPerCountry(this.country)
+      })
+
+      .then((saveArticleCount) => {
         this.newsDB.getCachedArticles(this.country)
           .then(res => {
-            console.log(res)
-            if (res.length > 0) {
-           this.articles = res
+          //if cachedArticles includes saved and unexpired , res.length > articleCount
+            if (res.length > saveArticleCount) {
+            //push the retrieved cachedArt into articles array
+           
+            this.articles = res
+           
             } else {
               this.newsDB.getApi()
                 .then(res => {
@@ -49,6 +56,13 @@ export class ResultsComponent implements OnInit {
                     this.newsDB.cachedArticles(art)
                   })
 
+                })
+                .then(()=> {
+                  return this.newsDB.getSavedArticles(this.country)
+                })
+                .then(savedArticles => {
+                //push savedArticles into this.articles array 
+                 savedArticles.forEach(a=> this.articles.push(a))
                 })
 
             }
@@ -70,7 +84,7 @@ export class ResultsComponent implements OnInit {
       .toPromise()
       .then(res => {
         this.articles = res.articles.map(a => {
-          const id = uuidv4().toString().substring(0,8)
+          const id = uuidv4().toString().substring(0, 8)
           const country = this.country
           const sourceName = a.source.name
           const author = a.author
@@ -80,19 +94,21 @@ export class ResultsComponent implements OnInit {
           const urlToImage = a.urlToImage
           const publishedAt = a.publishedAt
           const content = a.content
-          const expiry = new Date().getTime() + 10
+          const expiry = new Date().getTime() + 300000
           const saved = false.toString()
           return { id, country, sourceName, author, title, description, url, urlToImage, publishedAt, content, expiry, saved } as Articles
         })
         return this.articles
       })
+     
+     
   }
 
-  openLink(i) {
+  openLink(i: number) {
     window.open(this.articles[i].url)
   }
 
-  saveArticle(i){
+  saveArticle(i: number) {
     console.log('saved')
     this.newsDB.saveArticle(this.articles[i].id)
     alert('Saved!')

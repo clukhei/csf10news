@@ -64,6 +64,13 @@ export class NewsDatabase extends Dexie {
         })
     }
 
+    countSavedArticlesPerCountry(country: string): Promise<number> {
+        return this.articles.where('country').equals(country).and(a=> a.saved =='true').count()
+    }
+
+    getSavedArticles(country): Promise<Articles[]> {
+        return this.articles.where('saved').equals('true').and(a => a.country == country).toArray()
+    }
     // addToSave(art: Articles): Promise<any>{
     //     return this.savedArticles.put(art)
     // }
