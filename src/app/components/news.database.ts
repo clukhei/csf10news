@@ -7,20 +7,20 @@ import { Articles, Countries } from './models'
 export class NewsDatabase extends Dexie {
     apiKey: Dexie.Table
     countries: Dexie.Table<Countries, string>
-    articles: Dexie.Table<Articles, number>
-    savedArticles: Dexie.Table<Articles, number>
+    articles: Dexie.Table<Articles, string>
+   // savedArticles: Dexie.Table<Articles, number>
     constructor() {
         super('newsdb')
         this.version(1).stores({
             api: 'api',
             countries: 'code',
-            articles: '++id,expiry, country',
-            savedArticles: '++id, country'
+            articles: 'id,expiry, country, saved',
+           
         })
         this.apiKey = this.table('api')
         this.countries = this.table('countries')
         this.articles = this.table('articles')
-        this.savedArticles = this.table('savedArticles')
+      //  this.savedArticles = this.table('savedArticles')
     }
 
     getApi(): Promise<any[]> {
@@ -52,16 +52,20 @@ export class NewsDatabase extends Dexie {
     }
 
     getCachedArticles(country: string): Promise<Articles[]> {
-
-
         return this.articles.where('country').equals(country).toArray()
     }
 
-    addToSave(art: Articles): Promise<any>{
-        return this.savedArticles.put(art)
+    saveArticle(id: string): Promise<any> {
+        return this.articles.where('id').equals(id).modify(art=> {
+            art.saved = 'true'
+        })
     }
 
-    getSavedArticles(country:string): Promise<Articles[]> {
-        return this.savedArticles.where('country').equals(country).toArray()
-    }
+    // addToSave(art: Articles): Promise<any>{
+    //     return this.savedArticles.put(art)
+    // }
+
+    // getSavedArticles(country:string): Promise<Articles[]> {
+    //     return this.savedArticles.where('country').equals(country).toArray()
+    // }
 }

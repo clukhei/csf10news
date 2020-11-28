@@ -5,6 +5,7 @@ export interface Countries{
 }
 
 export interface Articles{
+    id: string
     country?: string;
     sourceName: string;
     author: string;
@@ -15,6 +16,6 @@ export interface Articles{
     publishedAt: string;
     content: string;
     expiry: number
-    saved: boolean
+    saved: string;
 
 }
