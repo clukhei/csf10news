@@ -14,7 +14,7 @@ export class NewsDatabase extends Dexie {
         this.version(1).stores({
             api: 'api',
             countries: 'code',
-            articles: 'id,expiry, country, saved',
+            articles: 'id,expiry, country, saved, [expiry+saved]',
            
         })
         this.apiKey = this.table('api')
@@ -22,6 +22,8 @@ export class NewsDatabase extends Dexie {
         this.articles = this.table('articles')
       //  this.savedArticles = this.table('savedArticles')
     }
+
+
 
     getApi(): Promise<any[]> {
         return this.apiKey.toArray()
@@ -48,7 +50,8 @@ export class NewsDatabase extends Dexie {
         return this.articles.put(arr)
     }
     clearInvalidCached(now: number): Promise<any> {
-        return this.articles.where('expiry').below(now).delete()
+        //return this.articles.where(['expiry', 'saved']).between([now-5, 'false'], [-Infinity,'false'], true, true).delete()
+        return this.articles.where('expiry').below(now).and(f=> f.saved == 'false').delete()
     }
 
     getCachedArticles(country: string): Promise<Articles[]> {

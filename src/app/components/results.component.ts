@@ -31,9 +31,9 @@ export class ResultsComponent implements OnInit {
       .then(() => {
         this.newsDB.getCachedArticles(this.country)
           .then(res => {
+            console.log(res)
             if (res.length > 0) {
-              res.forEach(art => this.articles.push(art))
-              console.log(this.articles)
+           this.articles = res
             } else {
               this.newsDB.getApi()
                 .then(res => {
@@ -80,7 +80,7 @@ export class ResultsComponent implements OnInit {
           const urlToImage = a.urlToImage
           const publishedAt = a.publishedAt
           const content = a.content
-          const expiry = new Date().getTime() + 300000
+          const expiry = new Date().getTime() + 10
           const saved = false.toString()
           return { id, country, sourceName, author, title, description, url, urlToImage, publishedAt, content, expiry, saved } as Articles
         })
