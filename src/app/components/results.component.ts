@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NewsDatabase } from './news.database'
 import { Articles } from './models'
 import { v4 as uuidv4 } from 'uuid';
+import { NewsService } from '../news.service';
 
 @Component({
   selector: 'app-results',
@@ -12,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class ResultsComponent implements OnInit {
 
-  constructor(private newsDB: NewsDatabase, private activatedRoute: ActivatedRoute, private http: HttpClient) { }
+  constructor(private newsDB: NewsDatabase, private activatedRoute: ActivatedRoute, private http: HttpClient, private newsSvc : NewsService) { }
 
   code: string = ''
   country: string = ''
@@ -75,14 +76,15 @@ export class ResultsComponent implements OnInit {
   }
 
 
-  fetchNewsApi(key) {
+  fetchNewsApi(key): Promise<Articles[]> {
     const newsUrl = 'https://newsapi.org/v2/top-headlines'
-    let params = new HttpParams()
-    params = params.set('country', this.code)
-    let headers = new HttpHeaders()
-    headers = headers.set('X-Api-Key', key)
-    return this.http.get<any>(newsUrl, { params: params, headers: headers })
-      .toPromise()
+    // let params = new HttpParams()
+    // params = params.set('country', this.code)
+    // let headers = new HttpHeaders()
+    // headers = headers.set('X-Api-Key', key)
+    // return this.http.get<any>(newsUrl, { params: params, headers: headers })
+    //   .toPromise()
+    return this.newsSvc.fetchNewsApi(key, this.code)
       .then(res => {
         this.articles = res.articles.map(a => {
           const id = uuidv4().toString().substring(0, 8)

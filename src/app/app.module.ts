@@ -9,6 +9,7 @@ import { ResultsComponent } from './components/results.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http'
 import { NewsDatabase } from './components/news.database'
+import { NewsService } from './news.service';
 
 const ROUTES: Routes = [
   {path: '', component: CountryListComponent},
@@ -33,7 +34,7 @@ const ROUTES: Routes = [
     
     
   ],
-  providers: [NewsDatabase],
+  providers: [NewsDatabase, NewsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
