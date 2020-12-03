@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NewsDatabase } from './news.database'
 import { Articles } from './models'
+import { v4 as uuidv4 } from 'uuid';
+
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
@@ -21,18 +23,24 @@ export class ResultsComponent implements OnInit {
     this.code = this.activatedRoute.snapshot.params['code']
     this.country = this.activatedRoute.snapshot.params['name']
     // get savedArticles 
-    this.newsDB.getSavedArticles(this.country).then(res => {
-      res.forEach(art => this.articles.push(art))
-    })
+    // this.newsDB.getSavedArticles(this.country).then(res => {
+    //   res.forEach(art => this.articles.push(art))
+    // })
     //clear any expired articles
     this.newsDB.clearInvalidCached(new Date().getTime())
       .then(() => {
-        //get cached articles
+        return this.newsDB.countSavedArticlesPerCountry(this.country)
+      })
+
+      .then((saveArticleCount) => {
         this.newsDB.getCachedArticles(this.country)
           .then(res => {
-            if (res.length > 0) {
-              res.forEach(art => this.articles.push(art))
-              console.log(this.articles)
+          //if cachedArticles includes saved and unexpired , res.length > articleCount
+            if (res.length > saveArticleCount) {
+            //push the retrieved cachedArt into articles array
+           
+            this.articles = res
+           
             } else {
               //proceed to fetch
               this.newsDB.getApi()
@@ -49,6 +57,13 @@ export class ResultsComponent implements OnInit {
                     this.newsDB.cachedArticles(art)
                   })
 
+                })
+                .then(()=> {
+                  return this.newsDB.getSavedArticles(this.country)
+                })
+                .then(savedArticles => {
+                //push savedArticles into this.articles array 
+                 savedArticles.forEach(a=> this.articles.push(a))
                 })
 
             }
@@ -70,6 +85,7 @@ export class ResultsComponent implements OnInit {
       .toPromise()
       .then(res => {
         this.articles = res.articles.map(a => {
+          const id = uuidv4().toString().substring(0, 8)
           const country = this.country
           const sourceName = a.source.name
           const author = a.author
@@ -80,20 +96,22 @@ export class ResultsComponent implements OnInit {
           const publishedAt = a.publishedAt
           const content = a.content
           const expiry = new Date().getTime() + 300000
-          const saved = false
-          return { country, sourceName, author, title, description, url, urlToImage, publishedAt, content, expiry, saved } as Articles
+          const saved = false.toString()
+          return { id, country, sourceName, author, title, description, url, urlToImage, publishedAt, content, expiry, saved } as Articles
         })
         return this.articles
       })
+     
+     
   }
 
-  openLink(i) {
+  openLink(i: number) {
     window.open(this.articles[i].url)
   }
 
-  saveArticle(i){
+  saveArticle(i: number) {
     console.log('saved')
-    this.newsDB.addToSave(this.articles[i])
+    this.newsDB.saveArticle(this.articles[i].id)
     alert('Saved!')
   }
 }
