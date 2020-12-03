@@ -42,6 +42,7 @@ export class ResultsComponent implements OnInit {
             this.articles = res
            
             } else {
+              //proceed to fetch
               this.newsDB.getApi()
                 .then(res => {
                   this.api = res[0].api
