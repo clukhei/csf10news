@@ -13,7 +13,15 @@
   </form>
   <div class="d-flex justify-content-between">
     <div>
-      <button class="btn btn-primary" (click)="goBack()">Back</button>
+      <sl-button pill (click)="alertWC()" (sl-focus)="focusEvent()" (sl-blur)="blurEvent()">
+        <sl-icon slot="suffix" name="exclamation-triangle"></sl-icon>
+        Web Component button
+      </sl-button>
+
+
+
+      <button class="btn btn-primary" (click)="goBack()"><i class="bi bi-1-circle"></i>
+         Back</button>
       <button class="btn btn-primary" [disabled]="form.invalid" (click)="deleteApi()">Delete</button>
     </div>
     <button class="btn btn-primary" [disabled]="form.invalid" (click)="saveApi()">Add</button>

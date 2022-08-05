@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NewsDatabase } from './news.database'
+import '@shoelace-style/shoelace/dist/components/button/button.js'
+import '@shoelace-style/shoelace/dist/components/icon/icon.js'
 
 @Component({
   selector: 'app-api-form',
@@ -29,6 +31,16 @@ export class ApiFormComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/'])
+  }
+
+  alertWC(){
+    alert('hello this is a webcomponent')
+  }
+  focusEvent(){
+    console.log('this is a focus event')
+  }
+  blurEvent(){
+    console.log('this is a blur event')
   }
 
   deleteApi() {
